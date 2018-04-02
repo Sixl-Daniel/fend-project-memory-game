@@ -71,17 +71,20 @@ h1 { font-weight: 300; }
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    transition: background-color 300ms linear, font-size 200ms 100ms ease-in-out, transform 300ms ease;
+    transform: rotateY(-180deg);
 }
 
 .deck .card.open {
     transform: rotateY(0);
     background: #637081;
     cursor: default;
-}
-
-.deck .card.show {
     font-size: 48px;
 }
+
+/* .deck .card.show {
+    font-size: 48px;
+} */
 
 .deck .card.match {
     cursor: default;
@@ -107,9 +110,27 @@ h1 { font-weight: 300; }
 }
 
 .score-panel .stars li {
+    opacity: 0.2;
+    transition: opacity 200ms linear;
     list-style: none;
     display: inline-block;
 }
+
+    .score-panel .stars.stars--count-3 li {
+        opacity: 1;
+        color: #f55d3e;
+    }
+
+    .score-panel .stars.stars--count-2 .star-1,
+    .score-panel .stars.stars--count-2 .star-2 {
+        opacity: 1;
+        color: #f55d3e;
+    }
+
+    .score-panel .stars.stars--count-1 .star-1 {
+        opacity: 1;
+        color: #f55d3e;
+    }
 
 .score-panel .restart {
     float: right;
