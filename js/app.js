@@ -2,7 +2,7 @@ const deck = document.querySelector(".deck");
 
 let cardList = [],
     cardListMarkup = '',
-    cardListClasses = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'];
+    cardListClasses = ['fa-codepen', 'fa-stack-overflow', 'fa-slack-hash', 'fa-node-js', 'fa-vuejs', 'fa-docker', 'fa-github', 'fa-npm'];
 
 /*
  * create a random list that holds all cards
@@ -11,7 +11,7 @@ let cardList = [],
 cardListClasses = cardListClasses.concat(cardListClasses);
 for (let i = 0; i < 16; i++) {
     const cardClass = cardListClasses[i];
-    const newCardMarkup = `<li class="card show open"><i class="fa ${cardClass}"></i></li>`;
+    const newCardMarkup = `<li class="card show open"><i class="fab ${cardClass}"></i></li>`;
     cardList.push(newCardMarkup);
 }
 
