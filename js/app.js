@@ -1,30 +1,32 @@
+const deck = document.querySelector(".deck");
+
+let cardList = [],
+    cardListMarkup = '',
+    cardListClasses = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'];
+
 /*
- * Create a list that holds all of your cards
+ * create a random list that holds all cards
  */
 
+cardListClasses = cardListClasses.concat(cardListClasses);
+for (let i = 0; i < 16; i++) {
+    const cardClass = cardListClasses[i];
+    const newCardMarkup = `<li class="card show open"><i class="fa ${cardClass}"></i></li>`;
+    cardList.push(newCardMarkup);
+}
 
 /*
- * Display the cards on the page
+ * display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
+shuffle(cardList);
+cardList.forEach(function (card) {
+    cardListMarkup += card;
+});
+deck.innerHTML = cardListMarkup;
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -36,3 +38,27 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+
+
+
+
+
+
+/*
+ * helper functions 
+ */
+
+// shuffle function from http://stackoverflow.com/a/2450976
+function shuffle(array) {
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+}
