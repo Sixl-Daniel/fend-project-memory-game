@@ -26,7 +26,7 @@ const model = {
     ],
     matchedSets: 0,
     locked: false,
-    maxMoves: 30,
+    maxMoves: 28,
     timeShowingCards: 1000
 
 };
@@ -193,11 +193,13 @@ const controller = {
         });
     },
     initVictory: function () {
+        view.audioVictory.play();
         let title = 'Victory!',
             message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and only <b>${controller.getMoves()} moves</b>.<br>Hooray. Do it again.`;
         this.modalToast(title, message);
     },
     initFailure: function () {
+        view.audioFailure.play();
         let title = 'Failure!',
             message = `Wow, this is unexpected. You lost.<br>It took you <b>${controller.getMoves()} moves</b> to match <b>${controller.getMatchedSets()} sets</b>.<br>Try again!`;
         this.modalToast(title, message);
@@ -222,14 +224,11 @@ const view = {
         this.matchedSetsEl = document.querySelector(".matched-sets");
         this.restartEl = document.querySelector(".restart");
         this.deckEl = document.querySelector(".deck");
-
-        // init sound
-
-        const clickAudioObject = document.createElement("audio");
-        clickAudioObject.src = "../media/card-sound.mp3";
-        clickAudioObject.volume = 0.2;
-        clickAudioObject.autoPlay = false;
-        clickAudioObject.preLoad = true;
+        
+        this.audioClick = document.querySelector("#audio-click");
+        this.audioMatch = document.querySelector("#audio-match");
+        this.audioVictory = document.querySelector("#audio-victory");
+        this.audioFailure = document.querySelector("#audio-failure");
 
         // add event listeners
 
@@ -240,7 +239,7 @@ const view = {
 
         function cardClickEventHandler(e) {
             if ( !controller.isLocked() && e.target.nodeName === 'LI') {
-                clickAudioObject.play();
+                view.audioClick.play();
                 let card = e.target;
                 // open card if not already open
                 if (!hasClass(card, 'open')) {
@@ -329,6 +328,7 @@ const view = {
     },
 
     matchCards: function (cardType) {
+        view.audioMatch.play();
         let cards = document.querySelectorAll('.card-number-' + cardType);
         for (var i = 0; i < cards.length; i++) {
             addClass(cards[i], 'match');
