@@ -73,6 +73,7 @@ h1 { font-weight: 300; }
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
     transition: background-color 300ms linear, font-size 200ms 100ms ease-in-out, transform 300ms ease;
     transform: rotateY(-180deg);
+    overflow: hidden;
 }
 
 .deck .card.open {
@@ -80,6 +81,14 @@ h1 { font-weight: 300; }
     background: #637081;
     cursor: default;
     font-size: 48px;
+}
+
+.is-locked .deck .card { 
+    cursor: not-allowed;
+}
+
+.is-locked .deck .card.open {
+    cursor: default;
 }
 
 /* .deck .card.show {
@@ -98,7 +107,9 @@ h1 { font-weight: 300; }
 
 .score-panel {
     text-align: left;
-    width: 345px;
+    display: flex;
+    width: 440px;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
