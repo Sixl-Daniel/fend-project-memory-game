@@ -223,6 +223,14 @@ const view = {
         this.restartEl = document.querySelector(".restart");
         this.deckEl = document.querySelector(".deck");
 
+        // init sound
+
+        const clickAudioObject = document.createElement("audio");
+        clickAudioObject.src = "../media/card-sound.mp3";
+        clickAudioObject.volume = 0.2;
+        clickAudioObject.autoPlay = false;
+        clickAudioObject.preLoad = true;
+
         // add event listeners
 
         this.restartEl.addEventListener('click', restartClickEventHandler);
@@ -232,6 +240,7 @@ const view = {
 
         function cardClickEventHandler(e) {
             if ( !controller.isLocked() && e.target.nodeName === 'LI') {
+                clickAudioObject.play();
                 let card = e.target;
                 // open card if not already open
                 if (!hasClass(card, 'open')) {
