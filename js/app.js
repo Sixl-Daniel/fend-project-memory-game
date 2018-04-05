@@ -222,7 +222,6 @@ const view = {
         this.starsEl = document.querySelector(".stars");
         this.movesEl = document.querySelector(".moves");
         this.matchedSetsEl = document.querySelector(".matched-sets");
-        this.restartEl = document.querySelector(".restart");
         this.deckEl = document.querySelector(".deck");
         
         this.audioClick = document.querySelector("#audio-click");
@@ -230,10 +229,22 @@ const view = {
         this.audioVictory = document.querySelector("#audio-victory");
         this.audioFailure = document.querySelector("#audio-failure");
 
+        this.displayClock = document.querySelector("#timer-display-clock");
+        this.btnStart = document.querySelector("#btn-start-game");
+        this.btnReset = document.querySelector("#btn-reset-game");
+
+        // init timer plugin
+
+        const timer = new Timer();
+        timer.start();
+
         // add event listeners
 
-        this.restartEl.addEventListener('click', restartClickEventHandler);
+        this.btnReset.addEventListener('click', restartClickEventHandler);
         this.deckEl.addEventListener('click', cardClickEventHandler);
+        timer.addEventListener('secondsUpdated', function (e) {
+            view.displayClock.innerHTML = timer.getTimeValues().toString();
+        });
 
         // event handlers
 
@@ -342,6 +353,14 @@ const view = {
         removeClass(document.getElementById(earlierCardID), 'open');
         removeClass(document.getElementById(laterCardID), 'open');
         controller.setLocked(false);
+    },
+
+    disableStartBtn: function () {
+        this.btnStart.disabled = true;
+    },
+
+    undisableStartBtn: function () {
+        this.btnStart.disabled = false;
     }
 
 };

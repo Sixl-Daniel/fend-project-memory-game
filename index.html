@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.2.0/js/iziToast.min.js" integrity="sha256-uCdpRo51COIjZA47syx+kEsafS8SC+wleH4f/PvVnMU=" crossorigin="anonymous"></script>
+    <script src="/js/vendor/easytimer.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.2.0/css/iziToast.min.css" integrity="sha256-KRuAWYyML8ozSxElJG/l4ZIS83XnPbd9WwhZMD1vrDI=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="css/app.css">
@@ -26,18 +27,21 @@
         		<li class="star-3"><i class="fas fa-star"></i></li>
         	</ul>
 
-            <div class="notes">
+            <div class="topbar">
                 <span class="moves">0 Moves</span> and <span class="matched-sets">0 matched sets</span>
-            </div>
-
-            <div class="restart">
-        		<i class="fas fa-redo"></i>
             </div>
             
         </section>
 
         <section class="board">
             <ul class="deck"></ul>
+            <div id="bottom-bar">
+                <div id="timer-display">Timer: <strong id="timer-display-clock">00:00:00</strong></div>
+                <div id="buttons-display">
+                    <button class="btn" id="btn-start-game"><i class="fas fa-play"></i> Start Game</button>
+                    <button class="btn" id="btn-reset-game"><i class="fas fa-redo"></i> Reset Game</button>
+                </div>
+            </div>
         </section>
 
     </div>
