@@ -12,6 +12,14 @@ Version: v5.0.9 / [https://fontawesome.com/](https://fontawesome.com/)
 - **iziToast**
 Version: 1.2.0 / [http://izitoast.marcelodolce.com/](http://izitoast.marcelodolce.com/)
 
+## Code snippets used
+
+- **Shuffle function**
+[http://stackoverflow.com/a/2450976](http://stackoverflow.com/a/2450976)
+
+- **Class helpers**
+[https://jaketrent.com/post/addremove-classes-raw-javascript/](https://jaketrent.com/post/addremove-classes-raw-javascript/)
+
 ## Sound effects used
 
 - **Card (card-sound.mp3)**
