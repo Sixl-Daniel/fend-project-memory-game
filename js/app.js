@@ -9,6 +9,7 @@ const model = {
         this.starsCurrent = this.starsStartValue;
         this.movesCurrent = this.movesStartValue;
     },
+    gameHasStarted: false,
     starsStartValue: 3,
     movesStartValue: 0,
     starsCurrent: null,
@@ -41,15 +42,48 @@ const controller = {
         console.clear();
         model.init();
         view.init();
+        this.lock();
+    },
+    startGame: function () {
+        model.gameHasStarted = true;
+        this.unlock();
+        view.renderLocked();
+        view.renderGameStatus();
+        view.enableResetBtn();
+        view.disableStartBtn();
+        view.startTimer();
+    },
+    resetGame: function () {
+        model.gameHasStarted = false;
+        this.lock();
+        this.resetMoves();
+        this.resetMatchedSets();
+        this.resetStars();
+        this.resetBoard();
+        view.renderLocked();
+        view.renderGameStatus();
+        view.disableResetBtn();
+        view.enableStartBtn();
+        view.resetTimer();
+        view.stopTimer();
+        view.renderClock();
+        iziToast.info({
+            title: 'Reset!',
+            message: 'New game initialized.',
+            timeout: 3000
+        });
+    },
+    gameHasStarted: function() {
+        return model.gameHasStarted;
     },
     isLocked: function(){
         return model.locked;
     },
-    setLocked(bool){
-        model.locked = bool;
+    lock(){
+        model.locked = true;
         view.renderLocked();
     },
-    resetLocked() {
+    unlock() {
         model.locked = false;
         view.renderLocked();
     },
@@ -107,21 +141,9 @@ const controller = {
     resetBoard: function () {
         view.renderBoard();
     },
-    resetGame: function() {
-        this.resetMoves();
-        this.resetMatchedSets();
-        this.resetStars();
-        this.resetBoard();
-        this.resetLocked();
-        iziToast.info({
-            title: 'Reset!',
-            message: 'New game initialized.',
-            timeout: 3000
-        });
-    },
     checkCardMatching(cardType, cardID) {
         if (model.cardCompare) {
-            this.setLocked(true);
+            this.lock();
             let previousCardID = model.cardCompare;
             let previousCardType = this.getCardType(model.cardCompare);
             this.incrementMoves();
@@ -163,10 +185,10 @@ const controller = {
     },
     checkVictory: function () {
         if (this.getMoves() >= model.maxMoves) {
-            controller.setLocked(true);
+            controller.lock();
             this.initFailure();
         } else if (this.getMatchedSets() >= 8) {
-            controller.setLocked(true);
+            controller.lock();
             this.initVictory();
         }
     },
@@ -193,15 +215,19 @@ const controller = {
         });
     },
     initVictory: function () {
+        let time = view.getTimer();
+        view.stopTimer();
         view.audioVictory.play();
         let title = 'Victory!',
-            message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and only <b>${controller.getMoves()} moves</b>.<br>Hooray. Do it again.`;
+            message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and <b>${controller.getMoves()} moves</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Hooray. Do it again.`;
         this.modalToast(title, message);
     },
     initFailure: function () {
+        let time = view.getTimer();
+        view.stopTimer();
         view.audioFailure.play();
         let title = 'Failure!',
-            message = `Wow, this is unexpected. You lost.<br>It took you <b>${controller.getMoves()} moves</b> to match <b>${controller.getMatchedSets()} sets</b>.<br>Try again!`;
+            message = `Wow, this is unexpected. You lost.<br>It took you <b>${controller.getMoves()} moves</b> to match <b>${controller.getMatchedSets()} sets</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Try again!`;
         this.modalToast(title, message);
     }
 
@@ -228,28 +254,26 @@ const view = {
         this.audioMatch = document.querySelector("#audio-match");
         this.audioVictory = document.querySelector("#audio-victory");
         this.audioFailure = document.querySelector("#audio-failure");
-
-        this.displayClock = document.querySelector("#timer-display-clock");
+        this.timerSeconds = document.querySelector("#timer-seconds");
         this.btnStart = document.querySelector("#btn-start-game");
         this.btnReset = document.querySelector("#btn-reset-game");
 
-        // init timer plugin
-
-        const timer = new Timer();
-        timer.start();
+        // instantiate Timer
+        
+        timer = new Timer();
 
         // add event listeners
-
-        this.btnReset.addEventListener('click', restartClickEventHandler);
+        this.btnStart.addEventListener('click', startClickEventHandler);
+        this.btnReset.addEventListener('click', resetClickEventHandler);
         this.deckEl.addEventListener('click', cardClickEventHandler);
         timer.addEventListener('secondsUpdated', function (e) {
-            view.displayClock.innerHTML = timer.getTimeValues().toString();
+            view.timerSeconds.innerHTML = timer.getTotalTimeValues().seconds;
         });
 
         // event handlers
 
         function cardClickEventHandler(e) {
-            if ( !controller.isLocked() && e.target.nodeName === 'LI') {
+            if (!controller.isLocked() && controller.gameHasStarted() && e.target.nodeName === 'LI') {
                 view.audioClick.play();
                 let card = e.target;
                 // open card if not already open
@@ -263,7 +287,11 @@ const view = {
             }
         };
 
-        function restartClickEventHandler() {
+        function startClickEventHandler() {
+            controller.startGame();
+        };
+
+        function resetClickEventHandler() {
             controller.resetGame();
         };
 
@@ -278,6 +306,19 @@ const view = {
         this.renderMatchedSets();
         this.renderStars();
         this.renderBoard();
+        this.renderGameStatus();
+    },
+
+    renderGameStatus: function () {
+        if (!controller.gameHasStarted()) {
+            if (!hasClass(document.body, 'game-off')) {
+                addClass(document.body, 'game-off');
+            }
+        } else {
+            if (hasClass(document.body, 'game-off')) {
+                removeClass(document.body, 'game-off');
+            }
+        }
     },
 
     renderMoves: function () {
@@ -338,13 +379,17 @@ const view = {
         }
     },
 
+    renderClock: function () {
+        view.timerSeconds.innerHTML = timer.getTotalTimeValues().seconds;
+    },
+
     matchCards: function (cardType) {
         view.audioMatch.play();
         let cards = document.querySelectorAll('.card-number-' + cardType);
         for (var i = 0; i < cards.length; i++) {
             addClass(cards[i], 'match');
         }
-        controller.setLocked(false);
+        controller.unlock();
     },
 
     returnCards: function (earlierCardID, laterCardID) {
@@ -352,15 +397,46 @@ const view = {
         let card2 = document.getElementById(laterCardID);
         removeClass(document.getElementById(earlierCardID), 'open');
         removeClass(document.getElementById(laterCardID), 'open');
-        controller.setLocked(false);
+        controller.unlock();
     },
 
     disableStartBtn: function () {
         this.btnStart.disabled = true;
     },
 
-    undisableStartBtn: function () {
+    enableStartBtn: function () {
         this.btnStart.disabled = false;
+    },
+
+    disableResetBtn: function () {
+        this.btnReset.disabled = true;
+    },
+
+    enableResetBtn: function () {
+        this.btnReset.disabled = false;
+    },
+
+    startTimer: function () {
+        timer.start();
+    },
+
+    stopTimer: function () {
+        timer.stop();
+    },
+
+    resetTimer: function () {
+        timer.reset();
+    },
+
+    pauseTimer: function () {
+        timer.pause();
+    },
+
+    getTimer: function () {
+        let hours = timer.getTimeValues().hours;
+        let minutes = timer.getTimeValues().minutes;
+        let seconds = timer.getTimeValues().seconds;
+        return {hours: hours, minutes: minutes, seconds: seconds};
     }
 
 };
@@ -369,7 +445,7 @@ const view = {
  * RUN APPLICATION
  */
 
-controller.init();
+controller.init(); 
 
 /*
  * HELPER FUNCTIONS

@@ -34,12 +34,13 @@
         </section>
 
         <section class="board">
+            <div id="game-notification">Press <b>Start</b> to begin game.</div>
             <ul class="deck"></ul>
             <div id="bottom-bar">
-                <div id="timer-display">Timer: <strong id="timer-display-clock">00:00:00</strong></div>
+                <div id="timer-display"><i class="far fa-clock"></i> Time: <span id="timer-seconds">0</span> seconds</div>
                 <div id="buttons-display">
-                    <button class="btn" id="btn-start-game"><i class="fas fa-play"></i> Start Game</button>
-                    <button class="btn" id="btn-reset-game"><i class="fas fa-redo"></i> Reset Game</button>
+                    <button class="btn" id="btn-start-game"><i class="fas fa-play"></i> Start</button>
+                    <button class="btn" id="btn-reset-game" disabled><i class="fas fa-redo"></i> Reset</button>
                 </div>
             </div>
         </section>
