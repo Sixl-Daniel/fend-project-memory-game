@@ -4,11 +4,12 @@
 
 const model = {
 
-    init: function () {
+    init: function() {
         console.log("model: init()");
         this.starsCurrent = this.starsStartValue;
         this.movesCurrent = this.movesStartValue;
     },
+
     gameHasStarted: false,
     starsStartValue: 3,
     movesStartValue: 0,
@@ -44,7 +45,8 @@ const controller = {
         view.init();
         this.lock();
     },
-    startGame: function () {
+
+    startGame: function() {
         model.gameHasStarted = true;
         this.unlock();
         view.renderLocked();
@@ -53,7 +55,8 @@ const controller = {
         view.disableStartBtn();
         view.startTimer();
     },
-    resetGame: function () {
+
+    resetGame: function() {
         model.gameHasStarted = false;
         this.lock();
         this.resetMoves();
@@ -73,41 +76,52 @@ const controller = {
             timeout: 3000
         });
     },
+
     gameHasStarted: function() {
         return model.gameHasStarted;
     },
+
     isLocked: function(){
         return model.locked;
     },
+
     lock(){
         model.locked = true;
         view.renderLocked();
     },
+
     unlock() {
         model.locked = false;
         view.renderLocked();
     },
-    getCardType: function (cardID) {
+
+    getCardType: function(cardID) {
         return cardID.substring(cardID.length - 1);
     },
-    getCardName: function (cardType) {
+
+    getCardName: function(cardType) {
         return model.cards[cardType - 1].name;
     },
-    getCards: function () {
+
+    getCards: function() {
         return model.cards;
     },
+
     getStars: function() {
         return model.starsCurrent;
     },
+
     setStars: function(stars) {
         model.starsCurrent = stars;
         view.renderStars();
     },
+
     resetStars: function() {
         model.starsCurrent = model.starsStartValue;
         view.renderStars();
     },
-    checkStars: function () {
+
+    checkStars: function() {
         let moves = this.getMoves();
         let stars = 
             moves > 24 ? 0 :
@@ -115,32 +129,40 @@ const controller = {
             moves > 12 ? 2 : 3;
         controller.setStars(stars);
     },
+
     getMoves: function() {
         return model.movesCurrent;
     },
+
     incrementMoves: function() {
         model.movesCurrent++;
         view.renderMoves();
         this.checkStars();
     },
+
     resetMoves: function() {
         model.movesCurrent = model.movesStartValue;
         view.renderMoves();
     },
-    getMatchedSets: function () {
+
+    getMatchedSets: function() {
         return model.matchedSets;
     },
-    incrementMatchedSets: function () {
+
+    incrementMatchedSets: function() {
         model.matchedSets++;
         view.renderMatchedSets();
     },
-    resetMatchedSets: function () {
+
+    resetMatchedSets: function() {
         model.matchedSets = 0;
         view.renderMatchedSets();
     },
-    resetBoard: function () {
+
+    resetBoard: function() {
         view.renderBoard();
     },
+
     checkCardMatching(cardType, cardID) {
         if (model.cardCompare) {
             this.lock();
@@ -158,6 +180,7 @@ const controller = {
         }
         this.checkVictory();
     },
+
     markMatchingCards(cardType) {
         let name = this.getCardName(cardType);
         iziToast.success({
@@ -168,6 +191,7 @@ const controller = {
         model.cardCompare = null;
         view.matchCards(cardType);
     },
+
     returnCards(earlierCardID, laterCardID) {
         let earlierCardType = this.getCardType(earlierCardID);
         let laterCardType = this.getCardType(laterCardID);
@@ -179,11 +203,12 @@ const controller = {
             timeout: 3000,
         });
         model.cardCompare = null;
-        setTimeout(function () {
+        setTimeout(function() {
             view.returnCards(earlierCardID, laterCardID);
         }, model.timeShowingCards);
     },
-    checkVictory: function () {
+
+    checkVictory: function() {
         if (this.getMoves() >= model.maxMoves) {
             controller.lock();
             this.initFailure();
@@ -192,6 +217,7 @@ const controller = {
             this.initVictory();
         }
     },
+
     modalToast(title, message){
         iziToast.show({
             title: title,
@@ -209,12 +235,13 @@ const controller = {
             titleLineHeight: '36px',
             messageSize: '18px',
             messageLineHeight: '24px',
-            onClosing: function () {
+            onClosing: function() {
                 controller.resetGame();
             }
         });
     },
-    initVictory: function () {
+
+    initVictory: function() {
         let time = view.getTimer();
         view.stopTimer();
         view.audioVictory.play();
@@ -222,7 +249,8 @@ const controller = {
             message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and <b>${controller.getMoves()} moves</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Hooray. Do it again.`;
         this.modalToast(title, message);
     },
-    initFailure: function () {
+    
+    initFailure: function() {
         let time = view.getTimer();
         view.stopTimer();
         view.audioFailure.play();
@@ -239,7 +267,7 @@ const controller = {
 
 const view = {
 
-    init: function () {
+    init: function() {
 
         console.log("view: init()");
 
@@ -263,10 +291,11 @@ const view = {
         timer = new Timer();
 
         // add event listeners
+
         this.btnStart.addEventListener('click', startClickEventHandler);
         this.btnReset.addEventListener('click', resetClickEventHandler);
         this.deckEl.addEventListener('click', cardClickEventHandler);
-        timer.addEventListener('secondsUpdated', function (e) {
+        timer.addEventListener('secondsUpdated', function(e) {
             view.timerSeconds.innerHTML = timer.getTotalTimeValues().seconds;
         });
 
@@ -281,7 +310,6 @@ const view = {
                     addClass(card, 'open');
                     let cardID = card.id;
                     let cardType = cardID.substr(cardID.length - 1);
-                    // console.log(cardID + ' | ' + cardType);
                     controller.checkCardMatching(cardType, cardID);
                 }
             }
@@ -301,7 +329,7 @@ const view = {
 
     },
 
-    renderAll: function () {
+    renderAll: function() {
         this.renderMoves();
         this.renderMatchedSets();
         this.renderStars();
@@ -309,7 +337,7 @@ const view = {
         this.renderGameStatus();
     },
 
-    renderGameStatus: function () {
+    renderGameStatus: function() {
         if (!controller.gameHasStarted()) {
             if (!hasClass(document.body, 'game-off')) {
                 addClass(document.body, 'game-off');
@@ -321,25 +349,25 @@ const view = {
         }
     },
 
-    renderMoves: function () {
+    renderMoves: function() {
         let moves = controller.getMoves();
         this.movesEl.textContent =
             moves === 0 ? 'No moves yet' :
             moves === 1 ? 'One move' : moves + ' moves'
     },
 
-    renderMatchedSets: function () {
+    renderMatchedSets: function() {
         let matchedSets = controller.getMatchedSets();
         this.matchedSetsEl.textContent =
             matchedSets === 0 ? 'no matched sets yet' :
             matchedSets === 1 ? 'one matched set' : matchedSets + ' matched sets'
     },
 
-    renderStars: function () {
+    renderStars: function() {
         this.starsEl.className = 'stars stars--count-' + controller.getStars();
     },
 
-    renderBoard: function () {
+    renderBoard: function() {
 
         /* vars */
 
@@ -364,26 +392,26 @@ const view = {
         /* create a markup string from randomized card array and inject markup in page */
 
         shuffle(cardListArray);
-        cardListArray.forEach(function (card) {
+        cardListArray.forEach(function(card) {
             cardListMarkupString += card;
         });
         this.deckEl.innerHTML = cardListMarkupString;
 
     },
 
-    renderLocked: function () {
+    renderLocked: function() {
         if (controller.isLocked()) {
-            addClass(document.body,'is-locked');
+            addClass(document.body, 'is-locked');
         } else {
             removeClass(document.body, 'is-locked');
         }
     },
 
-    renderClock: function () {
+    renderClock: function() {
         view.timerSeconds.innerHTML = timer.getTotalTimeValues().seconds;
     },
 
-    matchCards: function (cardType) {
+    matchCards: function(cardType) {
         view.audioMatch.play();
         let cards = document.querySelectorAll('.card-number-' + cardType);
         for (var i = 0; i < cards.length; i++) {
@@ -392,7 +420,7 @@ const view = {
         controller.unlock();
     },
 
-    returnCards: function (earlierCardID, laterCardID) {
+    returnCards: function(earlierCardID, laterCardID) {
         let card1 = document.getElementById(earlierCardID);
         let card2 = document.getElementById(laterCardID);
         removeClass(document.getElementById(earlierCardID), 'open');
@@ -400,39 +428,39 @@ const view = {
         controller.unlock();
     },
 
-    disableStartBtn: function () {
+    disableStartBtn: function() {
         this.btnStart.disabled = true;
     },
 
-    enableStartBtn: function () {
+    enableStartBtn: function() {
         this.btnStart.disabled = false;
     },
 
-    disableResetBtn: function () {
+    disableResetBtn: function() {
         this.btnReset.disabled = true;
     },
 
-    enableResetBtn: function () {
+    enableResetBtn: function() {
         this.btnReset.disabled = false;
     },
 
-    startTimer: function () {
+    startTimer: function() {
         timer.start();
     },
 
-    stopTimer: function () {
+    stopTimer: function() {
         timer.stop();
     },
 
-    resetTimer: function () {
+    resetTimer: function() {
         timer.reset();
     },
 
-    pauseTimer: function () {
+    pauseTimer: function() {
         timer.pause();
     },
 
-    getTimer: function () {
+    getTimer: function() {
         let hours = timer.getTimeValues().hours;
         let minutes = timer.getTimeValues().minutes;
         let seconds = timer.getTimeValues().seconds;
@@ -469,22 +497,25 @@ function shuffle(array) {
 // class helpers from https://jaketrent.com/post/addremove-classes-raw-javascript/
 
 function hasClass(el, className) {
-    if (el.classList)
+    if (el.classList) {
         return el.classList.contains(className)
-    else
+    } else {
         return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+    }
 }
 
 function addClass(el, className) {
-    if (el.classList)
+    if (el.classList) {
         el.classList.add(className)
-    else if (!hasClass(el, className)) el.className += " " + className
+    } else if (!hasClass(el, className)) {
+        el.className += " " + className
+    }
 }
 
 function removeClass(el, className) {
-    if (el.classList)
+    if (el.classList) {
         el.classList.remove(className)
-    else if (hasClass(el, className)) {
+    } else if (hasClass(el, className)) {
         var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
         el.className = el.className.replace(reg, ' ')
     }
