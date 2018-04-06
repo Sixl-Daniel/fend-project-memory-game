@@ -246,16 +246,16 @@ const controller = {
         view.stopTimer();
         view.audioVictory.play();
         let title = 'Victory!',
-            message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and <b>${controller.getMoves()} moves</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Hooray. Do it again.`;
+            message = `Yes, you did it. You won.<br>With a glorious rating of <b>${controller.getStars()} stars</b> and <b>${controller.getMoves()} moves</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>. Hooray.<br>Close dialog and press <b>Start</b> to play again.`;
         this.modalToast(title, message);
     },
-    
+
     initFailure: function() {
         let time = view.getTimer();
         view.stopTimer();
         view.audioFailure.play();
         let title = 'Failure!',
-            message = `Wow, this is unexpected. You lost.<br>It took you <b>${controller.getMoves()} moves</b> to match <b>${controller.getMatchedSets()} sets</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Try again!`;
+            message = `Wow, this is unexpected. You lost.<br>It took you <b>${controller.getMoves()} moves</b> to match <b>${controller.getMatchedSets()} sets</b>. You spent <b>${time.hours} hours</b>, <b>${time.minutes} minutes</b> and <b>${time.seconds} seconds</b>.<br>Close dialog and press <b>Start</b> to try again.`;
         this.modalToast(title, message);
     }
 
