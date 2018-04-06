@@ -37,3 +37,6 @@ Version: 1.2.0 / [http://izitoast.marcelodolce.com/](http://izitoast.marcelodolc
 - **Failure (failure-sound.mp3)**
 [http://www.orangefreesounds.com/cartoon-failure-trumpet/](http://www.orangefreesounds.com/cartoon-failure-trumpet/)
 [Licence](https://creativecommons.org/licenses/by-nc/4.0/)
+
+## Generator used for favicons
+[https://realfavicongenerator.net/](https://realfavicongenerator.net/)
