@@ -1,5 +1,8 @@
-# Memory Game Project — Daniel Sixl
-A practice project for the Udacity Frontend Nanodegree
+# Memory Game
+
+A practice project for the Udacity Front End Web Developer Nanodegree Program
+
+[Check the game out on it's GitHub Page.](https://sixl-daniel.github.io/fend-project-memory-game/)
 
 ## Libraries used
 
