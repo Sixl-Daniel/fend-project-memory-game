@@ -124,7 +124,6 @@ const controller = {
     checkStars: function() {
         let moves = this.getMoves();
         let stars = 
-            moves > 24 ? 0 :
             moves > 18 ? 1 :
             moves > 12 ? 2 : 3;
         controller.setStars(stars);
