@@ -5,7 +5,6 @@
 const model = {
 
     init: function() {
-        console.log("model: init()");
         this.starsCurrent = this.starsStartValue;
         this.movesCurrent = this.movesStartValue;
     },
@@ -40,7 +39,7 @@ const model = {
 const controller = {
 
     init: function() {
-        console.clear();
+        // console.clear();
         model.init();
         view.init();
         this.lock();
@@ -125,7 +124,7 @@ const controller = {
         let moves = this.getMoves();
         let stars = 
             moves > 18 ? 1 :
-            moves > 12 ? 2 : 3;
+                moves > 12 ? 2 : 3;
         controller.setStars(stars);
     },
 
@@ -268,22 +267,20 @@ const view = {
 
     init: function() {
 
-        console.log("view: init()");
-
         // store pointers to DOM elements
 
-        this.starsEl = document.querySelector(".stars");
-        this.movesEl = document.querySelector(".moves");
-        this.matchedSetsEl = document.querySelector(".matched-sets");
-        this.deckEl = document.querySelector(".deck");
+        this.starsEl = document.querySelector('.stars');
+        this.movesEl = document.querySelector('.moves');
+        this.matchedSetsEl = document.querySelector('.matched-sets');
+        this.deckEl = document.querySelector('.deck');
         
-        this.audioClick = document.querySelector("#audio-click");
-        this.audioMatch = document.querySelector("#audio-match");
-        this.audioVictory = document.querySelector("#audio-victory");
-        this.audioFailure = document.querySelector("#audio-failure");
-        this.timerSeconds = document.querySelector("#timer-seconds");
-        this.btnStart = document.querySelector("#btn-start-game");
-        this.btnReset = document.querySelector("#btn-reset-game");
+        this.audioClick = document.querySelector('#audio-click');
+        this.audioMatch = document.querySelector('#audio-match');
+        this.audioVictory = document.querySelector('#audio-victory');
+        this.audioFailure = document.querySelector('#audio-failure');
+        this.timerSeconds = document.querySelector('#timer-seconds');
+        this.btnStart = document.querySelector('#btn-start-game');
+        this.btnReset = document.querySelector('#btn-reset-game');
 
         // instantiate Timer
         
@@ -294,7 +291,7 @@ const view = {
         this.btnStart.addEventListener('click', startClickEventHandler);
         this.btnReset.addEventListener('click', resetClickEventHandler);
         this.deckEl.addEventListener('click', cardClickEventHandler);
-        timer.addEventListener('secondsUpdated', function(e) {
+        timer.addEventListener('secondsUpdated', function() {
             view.timerSeconds.innerHTML = timer.getTotalTimeValues().seconds;
         });
 
@@ -312,15 +309,15 @@ const view = {
                     controller.checkCardMatching(cardType, cardID);
                 }
             }
-        };
+        }
 
         function startClickEventHandler() {
             controller.startGame();
-        };
+        }
 
         function resetClickEventHandler() {
             controller.resetGame();
-        };
+        }
 
         // start rendering
 
@@ -352,14 +349,14 @@ const view = {
         let moves = controller.getMoves();
         this.movesEl.textContent =
             moves === 0 ? 'No moves yet' :
-            moves === 1 ? 'One move' : moves + ' moves'
+                moves === 1 ? 'One move' : moves + ' moves';
     },
 
     renderMatchedSets: function() {
         let matchedSets = controller.getMatchedSets();
         this.matchedSetsEl.textContent =
             matchedSets === 0 ? 'no matched sets yet' :
-            matchedSets === 1 ? 'one matched set' : matchedSets + ' matched sets'
+                matchedSets === 1 ? 'one matched set' : matchedSets + ' matched sets';
     },
 
     renderStars: function() {
@@ -385,8 +382,8 @@ const view = {
                 let card = cards[cardCount];
                 let newCardMarkup = `<li data-card="${card.type}" id="card-${cardSet}${card.type}" class="card card-set-${cardSet} card-number-${card.type}"><i class="fab ${card.class}"></i></li>`;
                 cardListArray.push(newCardMarkup);
-            };
-        };
+            }
+        }
         
         /* create a markup string from randomized card array and inject markup in page */
 
@@ -420,8 +417,6 @@ const view = {
     },
 
     returnCards: function(earlierCardID, laterCardID) {
-        let card1 = document.getElementById(earlierCardID);
-        let card2 = document.getElementById(laterCardID);
         removeClass(document.getElementById(earlierCardID), 'open');
         removeClass(document.getElementById(laterCardID), 'open');
         controller.unlock();
@@ -497,25 +492,25 @@ function shuffle(array) {
 
 function hasClass(el, className) {
     if (el.classList) {
-        return el.classList.contains(className)
+        return el.classList.contains(className);
     } else {
-        return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+        return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
     }
 }
 
 function addClass(el, className) {
     if (el.classList) {
-        el.classList.add(className)
+        el.classList.add(className);
     } else if (!hasClass(el, className)) {
-        el.className += " " + className
+        el.className += ' ' + className;
     }
 }
 
 function removeClass(el, className) {
     if (el.classList) {
-        el.classList.remove(className)
+        el.classList.remove(className);
     } else if (hasClass(el, className)) {
-        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
-        el.className = el.className.replace(reg, ' ')
+        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+        el.className = el.className.replace(reg, ' ');
     }
 }
