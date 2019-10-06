@@ -15,7 +15,7 @@ Version: 2.2.1 / [https://albert-gonzalez.github.io/easytimer.js/](https://alber
 Version: v5.0.9 / [https://fontawesome.com/](https://fontawesome.com/)
 
 - **iziToast**  
-Version: 1.2.0 / [http://izitoast.marcelodolce.com/](http://izitoast.marcelodolce.com/)
+Version: 1.2.0 / [http://izitoast.marcelodolza.com/](http://izitoast.marcelodolza.com/)
 
 ### Code snippets
 
